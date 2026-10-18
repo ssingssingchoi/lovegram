@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Lovegram · 에니어그램 유형 찾기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFFBF3; --paper:#FFFFFF; --sand:#FBF1DE;
+  --orange:#E8772E; --orange-deep:#C4581A; --orange-soft:#FDE6D4;
+  --yellow:#F5C044; --yellow-soft:#FFF1C9;
+  --green:#1E4636; --green-2:#2F6B53; --green-soft:#E6F0EA;
+  --ink:#1D2A23; --muted:#5F6E66; --line:#EADFCB;
+  --radius:20px; --shadow:0 14px 34px -16px rgba(30,70,54,.28);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--cream); color:var(--ink);
+  font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+  word-break:keep-all;
+}
+button{font:inherit}
+.serif{font-family:'Fraunces',Georgia,serif}
+
+/* ---------- Top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,251,243,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:22px;color:var(--green);cursor:pointer;background:none;border:0;padding:0}
+.brand svg{width:30px;height:30px}
+.brand .g{color:var(--orange)}
+.top-tag{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+main{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+.screen{display:none}
+.screen.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- Buttons ---------- */
+.btn{appearance:none;border:0;cursor:pointer;font-weight:700;border-radius:999px;padding:16px 30px;font-size:16px;transition:transform .15s,box-shadow .15s,background .15s,color .15s;display:inline-flex;align-items:center;gap:8px}
+.btn.primary{background:var(--green);color:#fff;box-shadow:0 12px 26px -12px rgba(30,70,54,.7)}
+.btn.primary:hover{transform:translateY(-2px);background:#163627}
+.btn.orange{background:var(--orange);color:#fff;box-shadow:0 12px 26px -12px rgba(196,88,26,.7)}
+.btn.orange:hover{transform:translateY(-2px);background:var(--orange-deep)}
+.btn.ghost{background:#fff;color:var(--green);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--green)}
+.btn.sm{padding:9px 16px;font-size:14px}
+.btn:disabled{opacity:.35;cursor:default;transform:none}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+/* ---------- Intro ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:64px 0 36px}
+.eyebrow{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange-deep);background:var(--orange-soft);padding:6px 12px;border-radius:999px}
+.title{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:clamp(60px,11vw,112px);line-height:.95;margin:18px 0 10px;color:var(--green);letter-spacing:-.025em}
+.title .g{color:var(--orange)}
+.catch{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(18px,2.5vw,25px);color:var(--orange-deep);margin:0 0 24px;position:relative;display:inline-block}
+.catch::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:8px;background:var(--yellow);opacity:.35;z-index:-1;border-radius:4px}
+.lead{font-size:17px;color:var(--muted);max-width:560px;margin:0}
+.lead b{color:var(--green)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 30px}
+.chip{font-size:13.5px;font-weight:500;color:var(--green);background:#fff;border:1px solid var(--line);padding:6px 13px;border-radius:999px}
+.hero-art{position:relative;aspect-ratio:1;max-width:420px;width:100%;justify-self:center}
+.hero-art .blob{position:absolute;border-radius:50%}
+.blob.b1{width:78%;height:78%;background:var(--yellow-soft);top:6%;left:6%}
+.blob.b2{width:34%;height:34%;background:var(--orange-soft);bottom:2%;right:2%}
+.blob.b3{width:16%;height:16%;background:var(--green-soft);top:0;right:14%}
+.hero-art svg{position:relative;width:100%;height:100%;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.guide{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.gcard .num{font-family:'Fraunces',Georgia,serif;font-size:30px;color:var(--orange);font-weight:700;line-height:1}
+.gcard h3{margin:10px 0 6px;font-size:17px;color:var(--green)}
+.gcard p{margin:0;color:var(--muted);font-size:14.5px}
+.note{display:flex;gap:12px;align-items:flex-start;margin-top:18px;background:var(--green-soft);border-radius:16px;padding:16px 20px;color:var(--green);font-size:14.5px}
+.note .ic{flex:none;width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+
+/* ---------- Quiz ---------- */
+.quiz-wrap{max-width:720px;margin:0 auto;padding:40px 0 20px}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.count{font-size:14px;color:var(--muted)}
+.count b{color:var(--green);font-size:20px}
+.progress{height:8px;background:#F1E7D3;border-radius:99px;overflow:hidden}
+#bar{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:99px;transition:width .45s ease}
+.qcard{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:38px;margin-top:22px;box-shadow:var(--shadow)}
+.qcard.swap{animation:swap .4s ease}
+@keyframes swap{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.scene{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--orange-deep);font-size:15px}
+.qcard h2{font-size:clamp(20px,3.2vw,26px);line-height:1.5;margin:8px 0 26px;color:var(--ink);font-weight:700}
+.opts{display:grid;gap:12px}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:var(--cream);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;font-size:16px;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s,transform .15s;line-height:1.5}
+.opt:hover{border-color:var(--orange);background:#FFF5E8;transform:translateY(-1px)}
+.opt .k{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid var(--line);font-weight:700;font-size:13px;color:var(--green);transition:all .15s}
+.opt.sel{border-color:var(--green);background:var(--green-soft)}
+.opt.sel .k{background:var(--green);color:#fff;border-color:var(--green)}
+.hint{text-align:center;color:var(--muted);font-size:14px;margin:20px 0 0}
+.kbd{display:inline-block;font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:0 6px;background:#fff;color:var(--green)}
+
+/* ---------- Loading ---------- */
+.loading{min-height:66vh;display:grid;place-items:center;text-align:center}
+.loading svg{width:150px;height:150px;animation:spin 7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading h2{color:var(--green);margin:22px 0 6px;font-size:22px}
+.loading p{color:var(--muted);margin:0;min-height:1.6em}
+
+/* ---------- Result ---------- */
+.r-hero{display:grid;grid-template-columns:320px 1fr;gap:40px;align-items:center;background:linear-gradient(135deg,#FFFFFF 0%,#FFF6DD 60%,var(--yellow-soft) 100%);border:1px solid var(--line);border-radius:32px;padding:40px;margin-top:40px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.r-hero::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:var(--orange-soft);right:-90px;top:-110px;opacity:.7}
+.r-hero > *{position:relative}
+.r-art{background:#fff;border-radius:50%;padding:12px;aspect-ratio:1;box-shadow:0 18px 40px -20px rgba(30,70,54,.45);border:6px solid #fff;outline:2px solid var(--yellow)}
+.r-art svg{width:100%;height:100%;display:block}
+.r-label{font-size:14.5px;color:var(--muted);font-weight:500}
+.r-type{font-size:clamp(36px,5.4vw,54px);font-weight:900;color:var(--green);line-height:1.12;margin:6px 0 12px;letter-spacing:-.01em}
+.r-type .n{color:var(--orange)}
+.r-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;padding:6px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.r-en{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--muted)}
+.r-tagline{font-size:18.5px;color:var(--orange-deep);font-weight:700;margin:16px 0 0}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 16px;min-width:110px}
+.stat b{display:block;font-size:22px;color:var(--green);line-height:1.3}
+.stat span{font-size:12.5px;color:var(--muted)}
+.r-desc{font-size:16.5px;margin:0}
+
+.section{margin-top:24px;background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:32px}
+.section h3{font-size:21px;color:var(--green);margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.section h3 .dot{width:10px;height:10px;border-radius:50%;background:var(--orange);flex:none}
+.sub{color:var(--muted);margin:0 0 20px;font-size:14.5px}
+.part{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-deep);margin:26px 0 4px}
+.axis{margin:16px 0 22px}
+.axis-head{font-size:15px;margin-bottom:8px}
+.axis-head b{color:var(--green)}
+.seg{display:flex;height:34px;border-radius:10px;overflow:hidden;background:#F4EDE0;font-size:12.5px;font-weight:700;gap:2px}
+.seg div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;flex-basis:0;transition:flex-grow 1s ease}
+.seg .on{background:var(--orange);color:#fff}
+.seg .off{background:#F3E3BF;color:var(--green)}
+.seg .off + .off{background:#EADBB8}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.legend .me{color:var(--orange-deep);font-weight:700}
+.tagok{display:inline-block;font-size:12.5px;font-weight:700;color:var(--green-2);background:var(--green-soft);padding:2px 9px;border-radius:999px;margin-left:6px}
+.tagsoft{display:inline-block;font-size:12.5px;color:var(--muted);background:#F5EFE4;padding:2px 9px;border-radius:999px;margin-left:6px}
+.callout{background:var(--green);color:#F4F1E8;border-radius:18px;padding:18px 22px;margin-top:6px;font-size:15.5px}
+.callout b{color:var(--yellow)}
+.evi{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+.evi li{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:12px;padding:12px 16px}
+.evi .q{font-size:13px;color:var(--muted)}
+.evi .a{font-weight:700;color:var(--green)}
+.empty{color:var(--muted);font-size:14.5px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box{border-radius:18px;padding:20px 22px;background:var(--cream);border:1px solid var(--line)}
+.box h4{margin:0 0 8px;font-size:12.5px;letter-spacing:.12em;color:var(--orange-deep);text-transform:uppercase}
+.box p{margin:0}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tags span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--green);font-weight:500}
+.box.myth{background:var(--yellow-soft);border:1px dashed #E2BC55}
+.box.why{background:var(--green-soft);border-color:#CFE2D6}
+
+.bars{display:grid;gap:4px}
+.brow{display:grid;grid-template-columns:44px 150px 1fr 52px;gap:12px;align-items:center;padding:5px 0}
+.brow .mini{width:44px;height:44px}
+.brow .mini svg{width:100%;height:100%}
+.brow .nm{font-size:14.5px;font-weight:500}
+.brow .nm b{color:var(--green)}
+.track{height:12px;background:#F3EBDD;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:#9DBBA9;border-radius:99px;transition:width 1.1s ease}
+.brow.top .fill{background:linear-gradient(90deg,var(--yellow),var(--orange))}
+.brow.top .nm b{color:var(--orange-deep)}
+.brow .pc{text-align:right;font-weight:700;color:var(--green);font-size:14.5px}
+
+.runner{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rcard{display:flex;gap:16px;align-items:center;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:16px}
+.rcard .mini{width:72px;height:72px;flex:none}
+.rcard .mini svg{width:100%;height:100%}
+.rcard .rk{font-size:12px;color:var(--orange-deep);font-weight:700;letter-spacing:.08em}
+.rcard .rn{font-weight:700;color:var(--green);font-size:17px}
+.rcard .rt{font-size:13.5px;color:var(--muted)}
+
+.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:32px}
+.disclaimer{text-align:center;color:var(--muted);font-size:13.5px;margin-top:18px}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gitem{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center}
+.gitem.me{border:2px solid var(--orange);background:#FFF7EC}
+.gitem .mini{width:110px;height:110px;margin:0 auto 8px}
+.gitem .mini svg{width:100%;height:100%}
+.gitem .gn{font-weight:700;color:var(--green)}
+.gitem .gc{font-size:13px;color:var(--orange-deep);font-weight:700}
+.gitem .gt{font-size:13.5px;color:var(--muted);margin-top:4px}
+.gitem details{margin-top:10px;text-align:left;font-size:13.5px}
+.gitem summary{cursor:pointer;color:var(--green-2);font-weight:700;text-align:center;list-style:none}
+.gitem summary::-webkit-details-marker{display:none}
+.gitem details p{margin:8px 0 0;color:var(--ink)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;padding:12px 20px;border-radius:999px;font-size:14.5px;opacity:0;pointer-events:none;transition:all .3s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 20px 44px;border-top:1px solid var(--line)}
+footer .fc{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--orange-deep);font-size:16px;display:block;margin-bottom:4px}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:32px;gap:12px}
+  .hero-art{max-width:260px;order:-1}
+  .guide,.grid2,.runner{grid-template-columns:1fr}
+  .r-hero{grid-template-columns:1fr;text-align:center;padding:30px 22px;gap:22px}
+  .r-art{max-width:230px;margin:0 auto}
+  .r-meta,.stats{justify-content:center}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  .brow{grid-template-columns:38px 1fr 48px;gap:4px 10px}
+  .brow .mini{width:38px;height:38px;grid-row:span 2}
+  .brow .nm{grid-column:2 / 4}
+  .brow .track{grid-column:2}
+}
+@media (max-width:520px){
+  main{padding:0 16px 60px}
+  .topbar .in{padding:12px 16px}
+  .top-tag{display:none}
+  .qcard{padding:26px 18px;border-radius:22px}
+  .opt{padding:14px;font-size:15.5px}
+  .section{padding:24px 18px}
+  .gallery{grid-template-columns:1fr 1fr;gap:10px}
+  .gitem{padding:14px 10px}
+  .gitem .mini{width:84px;height:84px}
+  .btn{padding:15px 24px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="in">
+    <button class="brand" id="homeBtn" aria-label="Lovegram 처음으로"><span id="logo"></span><span>Love<span class="g">gram</span></span></button>
+    <span class="top-tag">Enneagram Type Finder</span>
+  </div>
+</header>
+
+<main>
+  <!-- ================= INTRO ================= -->
+  <section class="screen active" id="intro">
+    <div class="hero">
+      <div>
+        <span class="eyebrow">Enneagram · 9 Types · Bias-reduced</span>
+        <h1 class="title">Love<span class="g">gram</span></h1>
+        <p class="catch">Miracle Always Happens to Anyone</p>
+        <p class="lead">유형 설명을 읽고 “나는 몇 번 같아”라고 고르는 방식은 <b>자기 자신에 대한 오해</b>와 <b>‘되고 싶은 나’</b>에 쉽게 흔들립니다. Lovegram은 의도가 드러나지 않는 일상 장면들로 당신의 <b>무의식적인 반응 패턴</b>을 읽어 냅니다.</p>
+        <div class="chips">
+          <span class="chip" id="chipCount">36개의 장면</span>
+          <span class="chip">약 6–8분</span>
+          <span class="chip">서버 전송 없음 · 브라우저에서만 계산</span>
+        </div>
+        <button class="btn primary" id="startBtn">테스트 시작하기 <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+        <div id="heroEnnea" style="position:relative;width:100%;height:100%"></div>
+      </div>
+    </div>
+
+    <div class="guide">
+      <div class="gcard"><div class="num">01</div><h3>정답도, 좋은 답도 없어요</h3><p>모든 선택지는 같은 무게를 가집니다. 더 멋져 보이는 답을 찾지 말고, 실제로 하는 쪽을 고르세요.</p></div>
+      <div class="gcard"><div class="num">02</div><h3>‘되고 싶은 나’ 말고 ‘지난 1년의 나’</h3><p>최고의 컨디션이 아니라, 피곤한 평일 저녁의 나를 떠올리면 더 정확해요.</p></div>
+      <div class="gcard"><div class="num">03</div><h3>3초 안에, 첫 느낌으로</h3><p>오래 고민할수록 ‘생각한 나’가 답을 고릅니다. 먼저 끌리는 쪽이 진짜에 가깝습니다.</p></div>
+    </div>
+    <div class="note"><span class="ic">i</span><span>결과가 나오기 전에는 9가지 유형과 캐릭터를 미리 보여 드리지 않아요. 미리 보면 마음에 드는 유형 쪽으로 답이 기울기 때문이에요.</span></div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="screen" id="quiz">
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <button class="btn ghost sm" id="backBtn">← 이전</button>
+        <div class="count"><b id="qNum">1</b> / <span id="qTotal">36</span></div>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="qcard" id="qcard">
+        <div class="scene" id="scene">Scene 01</div>
+        <h2 id="qText"></h2>
+        <div class="opts" id="opts"></div>
+      </div>
+      <p class="hint"><span id="hint"></span><br><span style="font-size:12.5px">키보드 <span class="kbd">1</span>–<span class="kbd">4</span> 로도 선택할 수 있어요</span></p>
+    </div>
+  </section>
+
+  <!-- ================= LOADING ================= -->
+  <section class="screen" id="loading">
+    <div class="loading">
+      <div>
+        <div id="loadEnnea"></div>
+        <h2>당신의 패턴을 읽는 중</h2>
+        <p id="loadStep">반응의 중심을 확인하고 있어요…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESULT ================= -->
+  <section class="screen" id="result"></section>
+</main>
+
+<footer>
+  <span class="fc">Miracle Always Happens to Anyone</span>
+  Lovegram · 에니어그램은 나를 ‘판정’하는 도구가 아니라 ‘이해’하는 지도입니다.
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   1. 에니어그램 구조: 세 가지 ‘숨은 축’
+   ---------------------------------------------------------
+   9개 유형은 아래 세 분류의 교차점으로 각각 유일하게 정의된다.
+   - 중심(Center)      : 본능(8,9,1) / 감정(2,3,4) / 사고(5,6,7)
+   - 호니비안(Hornevian): 주장형(3,7,8) / 의무형(1,2,6) / 후퇴형(4,5,9)
+   - 하모닉(Harmonic)  : 긍정형(2,7,9) / 역량형(1,3,5) / 반응형(4,6,8)
+   예) 1번 = 본능 × 의무형 × 역량형 → 이 조합을 가진 유형은 1번뿐.
+   ========================================================= */
+const AXES = {
+  center: { title: "반응의 중심", groups: {
+    gut:   { name: "본능(장)",   desc: "몸과 직감이 먼저 반응",        types: [8, 9, 1] },
+    heart: { name: "감정(가슴)", desc: "관계와 이미지가 먼저 반응",    types: [2, 3, 4] },
+    head:  { name: "사고(머리)", desc: "생각과 대비가 먼저 반응",      types: [5, 6, 7] } } },
+  horn: { title: "원하는 것에 다가가는 방식", groups: {
+    asr:  { name: "주장형", desc: "원하는 것을 향해 직접 움직임",        types: [3, 7, 8] },
+    comp: { name: "의무형", desc: "해야 할 것과 기준을 먼저 생각",       types: [1, 2, 6] },
+    wd:   { name: "후퇴형", desc: "한 걸음 물러나 내면에서 처리",        types: [4, 5, 9] } } },
+  harm: { title: "어려움을 다루는 방식", groups: {
+    pos: { name: "긍정 전환형", desc: "어려움을 밝은 쪽으로 돌림",       types: [2, 7, 9] },
+    cmp: { name: "역량형",      desc: "감정을 내려 두고 논리로 해결",    types: [1, 3, 5] },
+    rea: { name: "감정 반응형", desc: "감정을 먼저 표현하고 반응을 확인", types: [4, 6, 8] } } }
+};
+const TYPE_AX = {};
+for (const [ax, m] of Object.entries(AXES))
+  for (const [g, gm] of Object.entries(m.groups))
+    gm.types.forEach(t => { TYPE_AX[t] = TYPE_AX[t] || {}; TYPE_AX[t][ax] = g; });
+
+/* =========================================================
+   2. 9가지 유형 데이터
+   ========================================================= */
+const TYPES = {
+  1: { name: "개혁가", en: "The Reformer", char: "선비", tagline: "바른 붓끝으로 세상을 다듬는 사람",
+    desc: "당신은 “더 나아질 수 있다”는 감각을 늘 품고 사는 사람입니다. 일이든 관계든 옳은 방향을 알아보는 눈이 밝고, 그 기준을 누구보다 자기 자신에게 엄격하게 적용합니다. 불만이나 화가 올라와도 쉽게 드러내기보다 “제대로 해야지”라는 책임감으로 바꾸는 경우가 많습니다.",
+    desire: "옳고 선한 사람이 되는 것, 바르게 사는 것", fear: "잘못되거나 결함 있는 사람이 되는 것",
+    strengths: ["원칙과 신뢰", "높은 완성도", "공정함"],
+    growth: "“이 정도면 충분히 괜찮다”를 연습해 보세요. 실수는 고쳐야 할 결함이 아니라 배움의 흔적입니다. 내 안의 비판하는 목소리가 커질 때, 그 목소리에게도 쉬는 시간을 주세요.",
+    why: "선비는 남이 보지 않아도 스스로 세운 도리에 따라 몸가짐을 바로 하는 사람입니다. 외부의 평가보다 ‘내면의 기준’으로 자신을 다스리는 1번 유형을 가장 잘 닮았어요.",
+    myth: "“정리정돈을 잘하고 깔끔하면 1번”이라는 오해가 많습니다. 1번의 핵심은 겉의 깔끔함이 아니라, 끊임없이 옳고 그름을 판단하는 ‘내면의 비판자’와 꾹 눌러 둔 분노(불만)입니다. 방이 어질러진 1번도 많아요." },
+  2: { name: "조력가", en: "The Helper", char: "강아지", tagline: "먼저 다가가 마음을 데우는 사람",
+    desc: "당신은 사람들의 마음과 필요를 빠르게 읽어 내는 사람입니다. 누군가 힘들어 보이면 몸이 먼저 움직이고, 관계 속에서 “내가 도움이 되고 있다”는 감각이 큰 기쁨이 됩니다. 다만 정작 자신의 필요는 뒤로 미루다가, 알아주지 않을 때 서운함이 쌓이기도 합니다.",
+    desire: "사랑받고 필요한 존재가 되는 것", fear: "사랑받을 가치가 없는 사람이 되는 것",
+    strengths: ["공감과 배려", "관계를 잇는 힘", "따뜻한 실행력"],
+    growth: "도움을 주기 전에 “지금 나는 무엇이 필요하지?”를 먼저 물어보세요. 아무것도 해 주지 않아도, 당신은 이미 충분히 사랑받을 수 있는 사람입니다.",
+    why: "강아지는 사람의 기분을 누구보다 빨리 알아채고 꼬리를 흔들며 먼저 다가갑니다. 상대의 필요를 직감적으로 읽고 다가가는 2번 유형의 따뜻함과 꼭 닮았어요.",
+    myth: "“착하고 친절하면 2번”이라는 오해가 많습니다. 친절함은 모든 유형에 있어요. 2번의 핵심은 도움을 통해 사랑과 인정을 얻으려는 무의식적 전략, 그리고 자기 욕구를 잘 느끼지 못하는 것입니다." },
+  3: { name: "성취가", en: "The Achiever", char: "양파", tagline: "겹겹의 모습 속에 진짜를 품은 사람",
+    desc: "당신은 목표를 정하면 가장 효율적인 길을 찾아 결과로 증명하는 사람입니다. 상황이 요구하는 모습을 빠르게 파악하고 그에 맞게 자신을 조율하는 능력이 탁월합니다. 그러다 보니 “진짜 나는 무엇을 원하지?”라는 질문을 바쁨 속에 미뤄 두기 쉽습니다.",
+    desire: "가치 있고 인정받는 존재가 되는 것", fear: "아무 가치 없는 사람이 되는 것",
+    strengths: ["목표 달성력", "적응력과 효율", "사람을 움직이는 에너지"],
+    growth: "성과가 없는 날에도 당신의 가치는 그대로라는 걸 기억하세요. 가끔은 ‘잘 보이는 나’ 대신 ‘느끼는 나’로 시간을 보내 보세요.",
+    why: "양파는 여러 겹으로 이루어져 있습니다. 상황과 사람에 맞춰 가장 빛나는 겹을 꺼내 보이는 3번 유형처럼요. 그리고 겹을 벗길수록 진짜 중심이 드러난다는 점이 3번의 성장 방향을 보여 줍니다.",
+    myth: "“야망이 크고 일 욕심이 많으면 3번”이라는 오해가 많습니다. 3번의 핵심은 야망 자체가 아니라, 타인의 눈에 비친 ‘성공한 이미지’에 자신을 맞추다 진짜 감정과 멀어지는 패턴입니다. 조용하고 겸손해 보이는 3번도 많아요." },
+  4: { name: "개인주의자", en: "The Individualist", char: "꽃", tagline: "자기만의 빛깔로 피어나는 사람",
+    desc: "당신은 감정의 결을 깊고 섬세하게 느끼는 사람입니다. 남들이 지나치는 것에서 의미와 아름다움을 발견하고, 진정성 없는 것에는 쉽게 마음이 가지 않습니다. 때로 “나에게는 무언가 빠져 있다”는 감각에 오래 머무르며, 다른 사람과 자신을 비교하기도 합니다.",
+    desire: "고유한 자기 자신이 되는 것, 삶의 의미를 찾는 것", fear: "정체성도 의미도 없는 존재가 되는 것",
+    strengths: ["깊은 감수성", "진정성", "창조적 표현"],
+    growth: "지금 가진 것, 평범한 오늘 하루에서도 의미를 찾아보세요. 감정은 당신의 전부가 아니라, 당신이 가진 가장 아름다운 도구 중 하나입니다.",
+    why: "세상에 똑같은 꽃은 하나도 없습니다. 꽃은 피고 지는 모든 순간에 고유한 아름다움과 애틋함을 품고 있죠. 자기만의 의미와 정체성을 찾는 4번 유형의 깊은 감수성을 닮았어요.",
+    myth: "“예술을 하거나 감성적이면 4번”이라는 오해가 많습니다. 4번의 핵심은 예술적 재능이 아니라, “나에게는 무언가 결핍되어 있다”는 근원적인 느낌과 그로부터 비롯된 정체성 탐색입니다." },
+  5: { name: "탐구자", en: "The Investigator", char: "과학자", tagline: "세상을 이해해야 안심하는 관찰자",
+    desc: "당신은 무엇이든 깊이 이해하고 싶어 하는 사람입니다. 감정에 휩쓸리기보다 한 걸음 물러나 관찰하고 분석할 때 가장 편안합니다. 시간과 에너지, 사생활을 소중히 지키며, 준비되지 않은 채 무언가를 요구받는 상황에서 큰 피로를 느낍니다.",
+    desire: "유능하고 세상을 이해하는 사람이 되는 것", fear: "무능하고 쓸모없는 존재가 되는 것, 압도당하는 것",
+    strengths: ["깊은 통찰", "객관성", "독립성"],
+    growth: "완벽하게 알기 전에 한 발 먼저 참여해 보세요. 지식은 나눌 때 더 커지고, 사람들과의 연결은 생각보다 당신의 에너지를 덜 빼앗습니다.",
+    why: "과학자는 성급히 뛰어들기보다 한 걸음 떨어져 관찰하고, 충분히 이해한 뒤에 움직입니다. 지식으로 세상에 대비하는 5번 유형의 방식 그대로예요.",
+    myth: "“내향적이고 공부를 잘하면 5번”이라는 오해가 많습니다. 5번의 핵심은 지능이 아니라, 세상의 요구가 나를 고갈시킬 것 같은 느낌 때문에 에너지와 자원을 아끼며 관찰자로 물러나는 전략입니다." },
+  6: { name: "충성가", en: "The Loyalist", char: "고양이", tagline: "경계 속에서 믿음을 지키는 사람",
+    desc: "당신은 위험을 먼저 감지하고 대비하는 능력이 뛰어난 사람입니다. 믿을 수 있는 사람과 체계를 소중히 여기며, 한 번 맺은 관계에는 깊은 책임감을 보입니다. 머릿속에서는 “만약 ~하면 어쩌지?”라는 질문이 자주 돌아가고, 확신과 의심 사이를 오가기도 합니다.",
+    desire: "안전하고 믿을 수 있는 지지를 얻는 것", fear: "지지와 안내 없이 홀로 남겨지는 것",
+    strengths: ["위기 대비력", "책임감과 의리", "문제를 미리 보는 눈"],
+    growth: "‘최악의 시나리오’ 옆에 ‘충분히 괜찮은 시나리오’도 함께 떠올려 보세요. 당신이 찾는 확신은 바깥이 아니라, 이미 잘 해내 온 당신 안에 있습니다.",
+    why: "고양이는 낯선 소리에 귀를 쫑긋 세우고, 안전한지 충분히 확인한 뒤에야 다가갑니다. 하지만 한번 마음을 연 곳에는 누구보다 깊이 머물죠. 경계와 신뢰 사이를 오가는 6번 유형을 닮았어요.",
+    myth: "“겁이 많고 소심하면 6번”이라는 오해가 많습니다. 6번 중에는 불안에 정면으로 맞서는 ‘공포대항형’도 많아서 오히려 대담하고 반항적으로 보이기도 합니다. 핵심은 불안 그 자체보다 불확실성에 대처하는 방식이에요." },
+  7: { name: "열정가", en: "The Enthusiast", char: "서커스단원", tagline: "삶을 무대로 만드는 자유로운 사람",
+    desc: "당신은 가능성을 발견하는 데 천재적인 사람입니다. 새로운 경험과 아이디어에 쉽게 설레고, 어떤 상황에서도 재미있는 면을 찾아냅니다. 다만 지루함이나 고통스러운 감정이 다가오면 다음 계획과 즐거움으로 재빨리 옮겨 가며, 한 가지에 깊이 머무르기를 어려워할 때가 있습니다.",
+    desire: "만족스럽고 자유로운 삶, 충만한 경험", fear: "고통과 결핍 속에 갇히는 것",
+    strengths: ["낙관과 유머", "아이디어 발상", "빠른 실행력"],
+    growth: "다음 즐거움으로 넘어가기 전에, 지금 이 순간에 조금 더 머물러 보세요. 불편한 감정도 끝까지 느끼면 지나가고, 그 자리에 더 깊은 기쁨이 남습니다.",
+    why: "서커스단원은 여러 개의 공을 동시에 공중에 띄우고, 매 순간을 축제로 만듭니다. 다양한 가능성과 즐거움을 한꺼번에 쫓는 7번 유형의 반짝이는 에너지를 닮았어요.",
+    myth: "“밝고 외향적이고 노는 걸 좋아하면 7번”이라는 오해가 많습니다. 7번의 핵심은 즐거움 자체가 아니라, 고통과 불안을 피하려고 머릿속에서 끊임없이 다음 가능성을 계획하는 사고 패턴입니다." },
+  8: { name: "도전자", en: "The Challenger", char: "장군", tagline: "앞장서서 지키고 길을 여는 사람",
+    desc: "당신은 강한 에너지와 결단력으로 상황을 움직이는 사람입니다. 불의나 우유부단함을 보면 참기 어렵고, 약한 사람을 보호하려는 마음이 큽니다. 상처받거나 통제당하지 않으려 약한 모습을 잘 드러내지 않아서, 사람들이 당신의 부드러운 속마음을 모를 때가 많습니다.",
+    desire: "스스로를 지키고 내 삶을 주도하는 것", fear: "타인에게 통제당하거나 상처 입는 것",
+    strengths: ["결단력", "보호하는 힘", "솔직함과 추진력"],
+    growth: "약함을 보여 주는 것도 강함의 한 형태입니다. 믿는 사람 앞에서는 갑옷을 잠시 내려놓아 보세요. 당신의 부드러움은 당신의 힘을 줄이지 않습니다.",
+    why: "장군은 가장 앞에서 결정하고, 자기 사람들을 지키기 위해 기꺼이 맞섭니다. 강인함으로 자신과 소중한 이들을 보호하는 8번 유형의 모습 그대로예요.",
+    myth: "“화를 잘 내고 목소리가 크면 8번”이라는 오해가 많습니다. 8번의 핵심은 공격성이 아니라, 약해지거나 통제당하는 것을 피하려는 보호 본능입니다. 조용하지만 단단한 8번도 많아요." },
+  9: { name: "평화주의자", en: "The Peacemaker", char: "달팽이", tagline: "자기 속도로 평화를 지키는 사람",
+    desc: "당신은 주변에 편안함을 주는 사람입니다. 여러 입장을 두루 이해하고, 갈등 속에서 다리를 놓는 능력이 있습니다. 다만 평화를 지키기 위해 자신의 의견과 욕구를 잠재우다 보면 “내가 진짜 원하는 게 뭐였지?”를 잊어버리기도 합니다.",
+    desire: "내면의 평화와 조화", fear: "갈등과 분리, 연결을 잃는 것",
+    strengths: ["포용력", "중재 능력", "안정감"],
+    growth: "당신의 의견은 평화를 깨는 것이 아니라 관계를 더 진짜로 만듭니다. 작은 것부터 “나는 이게 좋아”라고 말하는 연습을 해 보세요.",
+    why: "달팽이는 자신의 집을 등에 지고, 서두르지 않고 자기만의 속도로 나아갑니다. 갈등보다 평온을 택하며 모든 것을 품어 내는 9번 유형의 느긋한 안정감을 닮았어요.",
+    myth: "“순하고 느긋하면 9번”이라는 오해가 많습니다. 9번의 핵심은 온순함이 아니라, 갈등을 피하려 자기 존재감과 분노를 잠재우는 ‘자기 망각’입니다. 고집이 매우 센 9번도 많아요." }
+};
+
+/* =========================================================
+   3. 유형 이미지 (인라인 SVG)
+   ========================================================= */
+const ART = {
+1: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선비">
+<circle cx="100" cy="100" r="96" fill="#FFF1C9"/><circle cx="160" cy="46" r="13" fill="#F5C044" opacity=".55"/>
+<path d="M46 196 Q50 130 100 124 Q150 130 154 196 Z" fill="#FFFDF7" stroke="#1E4636" stroke-width="3"/>
+<path d="M84 128 L118 178" stroke="#2F6B53" stroke-width="7" stroke-linecap="round"/><path d="M116 128 L100 150" stroke="#2F6B53" stroke-width="7" stroke-linecap="round"/>
+<circle cx="100" cy="94" r="30" fill="#F7D9BD"/>
+<path d="M76 72 Q72 106 90 122" stroke="#1F2A24" stroke-width="1.6" fill="none"/><path d="M124 72 Q128 106 110 122" stroke="#1F2A24" stroke-width="1.6" fill="none"/>
+<path d="M83 70 L85 40 Q100 34 115 40 L117 70 Z" fill="#1F2A24"/><ellipse cx="100" cy="70" rx="54" ry="9" fill="#1F2A24" fill-opacity=".9"/>
+<path d="M85 92 q5 4 10 0 M105 92 q5 4 10 0" stroke="#1F2A24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<circle cx="82" cy="102" r="4" fill="#F2A07B" opacity=".6"/><circle cx="118" cy="102" r="4" fill="#F2A07B" opacity=".6"/>
+<path d="M94 106 q6 3 12 0" stroke="#1F2A24" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M97 113 Q100 126 103 113 Z" fill="#1F2A24"/>
+<g transform="rotate(-6 100 166)"><rect x="70" y="150" width="60" height="34" rx="4" fill="#1E4636"/><rect x="74" y="153" width="25" height="28" fill="#FFF8EC"/><rect x="101" y="153" width="25" height="28" fill="#FFF8EC"/>
+<path d="M78 160 h17 M78 166 h17 M78 172 h12 M105 160 h17 M105 166 h17 M105 172 h12" stroke="#C4581A" stroke-width="1.6"/></g>
+</svg>`,
+2: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="강아지">
+<circle cx="100" cy="100" r="96" fill="#E6F0EA"/>
+<ellipse cx="58" cy="94" rx="18" ry="36" fill="#C4581A" transform="rotate(22 58 94)"/><ellipse cx="142" cy="94" rx="18" ry="36" fill="#C4581A" transform="rotate(-22 142 94)"/>
+<ellipse cx="100" cy="100" rx="44" ry="42" fill="#F5C044"/><ellipse cx="118" cy="88" rx="14" ry="13" fill="#E8772E" opacity=".45"/>
+<ellipse cx="100" cy="118" rx="23" ry="17" fill="#FFF8EC"/><ellipse cx="100" cy="109" rx="8.5" ry="6" fill="#1F2A24"/>
+<path d="M100 115 v6 M100 121 q-7 6 -12 1 M100 121 q7 6 12 1" stroke="#1F2A24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M95 125 Q100 140 105 125 Z" fill="#F07C7C"/>
+<circle cx="83" cy="92" r="6" fill="#1F2A24"/><circle cx="85" cy="90" r="2" fill="#fff"/><circle cx="117" cy="92" r="6" fill="#1F2A24"/><circle cx="119" cy="90" r="2" fill="#fff"/>
+<circle cx="74" cy="110" r="5" fill="#F2A07B" opacity=".6"/><circle cx="126" cy="110" r="5" fill="#F2A07B" opacity=".6"/>
+<path d="M64 136 Q100 156 136 136" stroke="#1E4636" stroke-width="9" fill="none" stroke-linecap="round"/>
+<path d="M100 152 c-8 -8 -17 2 0 13 c17 -11 8 -21 0 -13z" fill="#E8772E" stroke="#fff" stroke-width="1.5"/>
+</svg>`,
+3: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="양파">
+<circle cx="100" cy="100" r="96" fill="#FDE6D4"/>
+<path d="M100 54 Q92 32 78 24" stroke="#2F6B53" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M100 54 Q104 28 118 18" stroke="#2F6B53" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M100 54 Q99 36 96 28" stroke="#1E4636" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M100 50 C60 70 44 110 60 140 C72 162 128 162 140 140 C156 110 140 70 100 50 Z" fill="#E39143"/>
+<path d="M100 54 C66 78 58 116 70 146" stroke="#FFF1C9" stroke-width="3" fill="none" opacity=".5"/>
+<path d="M100 54 C78 78 72 116 82 152" stroke="#C4581A" stroke-width="2.5" fill="none" opacity=".5"/><path d="M100 54 C122 78 128 116 118 152" stroke="#C4581A" stroke-width="2.5" fill="none" opacity=".5"/>
+<path d="M142 116 C158 108 168 120 162 134 C152 130 146 126 142 116 Z" fill="#F5C044" stroke="#C4581A" stroke-width="2"/>
+<path d="M92 158 l-4 10 M100 160 v12 M108 158 l4 10" stroke="#C4581A" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="86" cy="112" r="5" fill="#1F2A24"/><circle cx="87.5" cy="110.5" r="1.7" fill="#fff"/><circle cx="114" cy="112" r="5" fill="#1F2A24"/><circle cx="115.5" cy="110.5" r="1.7" fill="#fff"/>
+<circle cx="78" cy="124" r="5" fill="#F07C7C" opacity=".5"/><circle cx="122" cy="124" r="5" fill="#F07C7C" opacity=".5"/>
+<path d="M91 124 q9 8 18 0" stroke="#1F2A24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<path d="M152 42 L155 51 L164 54 L155 57 L152 66 L149 57 L140 54 L149 51 Z" fill="#F5C044"/><path d="M48 72 L50 77 L55 79 L50 81 L48 86 L46 81 L41 79 L46 77 Z" fill="#E8772E"/>
+</svg>`,
+4: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="꽃">
+<circle cx="100" cy="100" r="96" fill="#E6F0EA"/>
+<path d="M100 118 Q95 158 100 196" stroke="#2F6B53" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M99 160 Q72 152 62 130 Q90 132 99 160 Z" fill="#2F6B53"/><path d="M101 174 Q130 166 140 144 Q110 146 101 174 Z" fill="#1E4636"/>
+<g transform="translate(100 80)">
+<ellipse cx="0" cy="-32" rx="17" ry="28" fill="#E8772E"/><ellipse cx="0" cy="-32" rx="17" ry="28" fill="#F5C044" transform="rotate(45)"/>
+<ellipse cx="0" cy="-32" rx="17" ry="28" fill="#E8772E" transform="rotate(90)"/><ellipse cx="0" cy="-32" rx="17" ry="28" fill="#F5C044" transform="rotate(135)"/>
+<ellipse cx="0" cy="-32" rx="17" ry="28" fill="#E8772E" transform="rotate(180)"/><ellipse cx="0" cy="-32" rx="17" ry="28" fill="#F5C044" transform="rotate(225)"/>
+<ellipse cx="0" cy="-32" rx="17" ry="28" fill="#C4581A" transform="rotate(270)"/><ellipse cx="0" cy="-32" rx="17" ry="28" fill="#F5C044" transform="rotate(315)"/>
+</g>
+<circle cx="100" cy="80" r="25" fill="#FFF8EC" stroke="#F5C044" stroke-width="3"/>
+<path d="M88 78 q4 4 8 0 M104 78 q4 4 8 0" stroke="#1F2A24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<circle cx="86" cy="87" r="3.6" fill="#F07C7C" opacity=".5"/><circle cx="114" cy="87" r="3.6" fill="#F07C7C" opacity=".5"/>
+<path d="M96 90 q4 3 8 0" stroke="#1F2A24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M150 128 q4 -8 0 -14 q-4 6 0 14z" fill="#FFF8EC" stroke="#9DBBA9" stroke-width="1.5"/>
+</svg>`,
+5: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="과학자">
+<circle cx="100" cy="100" r="96" fill="#FDE6D4"/>
+<path d="M44 196 Q48 132 100 126 Q152 132 156 196 Z" fill="#FFFFFF" stroke="#1E4636" stroke-width="3"/>
+<path d="M86 130 L100 162 L114 130 Z" fill="#2F6B53"/><path d="M86 130 L96 196 M114 130 L104 196" stroke="#1E4636" stroke-width="2"/>
+<rect x="122" y="152" width="18" height="15" rx="2" fill="none" stroke="#1E4636" stroke-width="2"/><path d="M127 146 v9 M133 144 v11" stroke="#E8772E" stroke-width="3" stroke-linecap="round"/>
+<circle cx="100" cy="92" r="30" fill="#F7D9BD"/>
+<path d="M70 90 Q64 60 84 58 Q88 46 100 52 Q112 44 118 58 Q138 58 130 90 Q126 72 114 70 Q100 76 86 70 Q74 74 70 90 Z" fill="#5A4636"/>
+<circle cx="88" cy="94" r="9.5" fill="#FFFFFF" fill-opacity=".55" stroke="#1F2A24" stroke-width="3"/><circle cx="112" cy="94" r="9.5" fill="#FFFFFF" fill-opacity=".55" stroke="#1F2A24" stroke-width="3"/>
+<path d="M97.5 94 h5" stroke="#1F2A24" stroke-width="3"/><circle cx="88" cy="94" r="2.8" fill="#1F2A24"/><circle cx="112" cy="94" r="2.8" fill="#1F2A24"/>
+<ellipse cx="100" cy="110" rx="4" ry="3.2" fill="#1F2A24"/>
+<path d="M50 118 h12 v16 l16 28 a4 4 0 0 1 -3.5 6 h-37 a4 4 0 0 1 -3.5 -6 l16 -28 z" fill="#FFF8EC" stroke="#1E4636" stroke-width="3" stroke-linejoin="round"/>
+<path d="M41 150 h30 l6.5 12 a3 3 0 0 1 -2.5 4 h-38 a3 3 0 0 1 -2.5 -4 z" fill="#F5C044"/>
+<circle cx="54" cy="104" r="4" fill="#E8772E" opacity=".75"/><circle cx="62" cy="92" r="3" fill="#E8772E" opacity=".6"/><circle cx="50" cy="84" r="2.5" fill="#E8772E" opacity=".45"/>
+</svg>`,
+6: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="고양이">
+<circle cx="100" cy="100" r="96" fill="#FFF1C9"/>
+<path d="M138 172 Q178 166 172 126 Q168 106 152 112" stroke="#34463D" stroke-width="12" fill="none" stroke-linecap="round"/>
+<ellipse cx="100" cy="160" rx="44" ry="34" fill="#34463D"/><ellipse cx="100" cy="166" rx="21" ry="22" fill="#FFF8EC"/>
+<path d="M60 78 L64 34 L94 60 Z" fill="#34463D"/><path d="M140 78 L136 34 L106 60 Z" fill="#34463D"/>
+<path d="M67 66 L69 46 L84 60 Z" fill="#F2A07B"/><path d="M133 66 L131 46 L116 60 Z" fill="#F2A07B"/>
+<ellipse cx="100" cy="92" rx="44" ry="38" fill="#34463D"/>
+<ellipse cx="82" cy="90" rx="10.5" ry="11.5" fill="#F5C044"/><ellipse cx="82" cy="90" rx="3.2" ry="8.5" fill="#1F2A24"/>
+<ellipse cx="118" cy="90" rx="10.5" ry="11.5" fill="#F5C044"/><ellipse cx="118" cy="90" rx="3.2" ry="8.5" fill="#1F2A24"/>
+<circle cx="84.5" cy="86" r="2" fill="#fff"/><circle cx="120.5" cy="86" r="2" fill="#fff"/>
+<path d="M95.5 104 h9 l-4.5 5 z" fill="#F2A07B"/>
+<path d="M100 109 q-5 6 -10 2 M100 109 q5 6 10 2" stroke="#FFF8EC" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M74 104 l-22 -3 M74 109 l-22 4 M126 104 l22 -3 M126 109 l22 4" stroke="#FFF8EC" stroke-width="1.8" stroke-linecap="round" opacity=".85"/>
+<ellipse cx="84" cy="190" rx="12" ry="6.5" fill="#FFF8EC"/><ellipse cx="116" cy="190" rx="12" ry="6.5" fill="#FFF8EC"/>
+</svg>`,
+7: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서커스단원">
+<circle cx="100" cy="100" r="96" fill="#FFF1C9"/>
+<path d="M50 56 Q100 -6 150 56" stroke="#C4581A" stroke-width="2" stroke-dasharray="2 7" fill="none" stroke-linecap="round"/>
+<circle cx="50" cy="46" r="11" fill="#E8772E"/><circle cx="100" cy="24" r="11" fill="#1E4636"/><circle cx="150" cy="46" r="11" fill="#F5C044" stroke="#C4581A" stroke-width="2"/>
+<path d="M68 148 Q50 112 52 70" stroke="#E8772E" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M132 148 Q150 112 148 70" stroke="#E8772E" stroke-width="12" fill="none" stroke-linecap="round"/>
+<circle cx="52" cy="66" r="8" fill="#F7D9BD"/><circle cx="148" cy="66" r="8" fill="#F7D9BD"/>
+<path d="M48 196 Q52 138 100 132 Q148 138 152 196 Z" fill="#E8772E"/>
+<path d="M76 164 l8 -10 l8 10 l-8 10 z M108 164 l8 -10 l8 10 l-8 10 z M92 188 l8 -10 l8 10 l-8 10 z M60 188 l8 -10 l8 10 l-8 10 z M124 188 l8 -10 l8 10 l-8 10 z" fill="#F5C044"/>
+<g fill="#FFF8EC" stroke="#E8C77A" stroke-width="1.5"><circle cx="74" cy="138" r="8"/><circle cx="126" cy="138" r="8"/><circle cx="87" cy="142" r="8"/><circle cx="113" cy="142" r="8"/><circle cx="100" cy="144" r="8"/></g>
+<circle cx="100" cy="104" r="28" fill="#F7D9BD"/>
+<g transform="rotate(-10 100 76)"><rect x="83" y="48" width="34" height="28" rx="3" fill="#1E4636"/><rect x="83" y="66" width="34" height="5" fill="#F5C044"/><rect x="74" y="74" width="52" height="6" rx="3" fill="#1E4636"/></g>
+<path d="M85 100 q5 -6 10 0 M105 100 q5 -6 10 0" stroke="#1F2A24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<circle cx="81" cy="112" r="5" fill="#F07C7C" opacity=".55"/><circle cx="119" cy="112" r="5" fill="#F07C7C" opacity=".55"/>
+<path d="M89 114 Q100 128 111 114 Z" fill="#1F2A24"/><circle cx="100" cy="108" r="4.5" fill="#E8772E"/>
+</svg>`,
+8: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="장군">
+<circle cx="100" cy="100" r="96" fill="#FDE6D4"/>
+<path d="M36 196 Q42 128 100 122 Q158 128 164 196 Z" fill="#C4581A"/>
+<rect x="92" y="122" width="16" height="16" fill="#F7D9BD"/>
+<path d="M58 196 Q60 140 100 134 Q140 140 142 196 Z" fill="#1E4636"/>
+<g stroke="#F5C044" stroke-width="2" fill="none" opacity=".75"><path d="M72 170 q7 7 14 0 q7 7 14 0 q7 7 14 0 q7 7 14 0"/><path d="M68 184 q8 7 16 0 q8 7 16 0 q8 7 16 0 q8 7 16 0"/></g>
+<path d="M100 140 L102.6 146.4 L109.5 146.9 L104.2 151.3 L105.9 158.1 L100 154.4 L94.1 158.1 L95.8 151.3 L90.5 146.9 L97.4 146.4 Z" fill="#F5C044"/>
+<ellipse cx="64" cy="142" rx="20" ry="11" fill="#2F6B53" stroke="#F5C044" stroke-width="2" transform="rotate(-18 64 142)"/><ellipse cx="136" cy="142" rx="20" ry="11" fill="#2F6B53" stroke="#F5C044" stroke-width="2" transform="rotate(18 136 142)"/>
+<circle cx="100" cy="100" r="28" fill="#F7D9BD"/>
+<path d="M70 96 Q70 62 100 60 Q130 62 130 96 Q100 84 70 96 Z" fill="#1E4636"/>
+<path d="M66 96 Q100 82 134 96 L134 102 Q100 90 66 102 Z" fill="#F5C044"/>
+<rect x="97" y="46" width="6" height="16" rx="2" fill="#F5C044"/><path d="M100 48 Q94 26 110 14 Q108 30 120 26 Q108 40 100 48 Z" fill="#E8772E"/>
+<path d="M84 104 l11 3 M116 104 l-11 3" stroke="#1F2A24" stroke-width="3.4" stroke-linecap="round"/>
+<circle cx="90" cy="111" r="3.4" fill="#1F2A24"/><circle cx="110" cy="111" r="3.4" fill="#1F2A24"/>
+<path d="M88 119 Q94 115 100 119 Q106 115 112 119 Q106 123 100 121 Q94 123 88 119 Z" fill="#3A2A20"/>
+<path d="M94 124.5 q6 2.5 12 0" stroke="#1F2A24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+</svg>`,
+9: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="달팽이">
+<circle cx="100" cy="100" r="96" fill="#E6F0EA"/>
+<path d="M14 182 Q100 160 186 180 Q100 196 14 182 Z" fill="#2F6B53" opacity=".3"/>
+<path d="M52 110 Q46 92 40 78" stroke="#D99A3E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M64 110 Q68 92 74 80" stroke="#D99A3E" stroke-width="4" fill="none" stroke-linecap="round"/>
+<circle cx="40" cy="75" r="6" fill="#1E4636"/><circle cx="74" cy="77" r="6" fill="#1E4636"/>
+<rect x="34" y="150" width="148" height="26" rx="13" fill="#F5C76E"/>
+<ellipse cx="58" cy="134" rx="22" ry="30" fill="#F5C76E"/>
+<circle cx="50" cy="128" r="3.4" fill="#1F2A24"/><circle cx="66" cy="128" r="3.4" fill="#1F2A24"/>
+<circle cx="45" cy="138" r="3.6" fill="#F07C7C" opacity=".55"/><circle cx="71" cy="138" r="3.6" fill="#F07C7C" opacity=".55"/>
+<path d="M51 139 q7 6 14 0" stroke="#1F2A24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<circle cx="124" cy="114" r="46" fill="#E8772E" stroke="#C4581A" stroke-width="3"/>
+<path d="M122 114 A4 4 0 0 1 130 114 A8 8 0 0 1 114 114 A12 12 0 0 1 138 114 A16 16 0 0 1 106 114 A20 20 0 0 1 146 114 A24 24 0 0 1 98 114 A28 28 0 0 1 154 114" stroke="#FFF1C9" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M118 70 Q130 54 146 60 Q136 76 118 70 Z" fill="#2F6B53"/>
+<path d="M178 128 h10 M181 140 h7" stroke="#2F6B53" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+</svg>`
+};
+
+function ennea(labels) {
+  const c = 100, r = 72;
+  const P = k => { const a = (-90 + k * 40) * Math.PI / 180; return [c + r * Math.cos(a), c + r * Math.sin(a)]; };
+  const pts = ks => ks.map(k => P(k).map(n => n.toFixed(1)).join(",")).join(" ");
+  let dots = "";
+  for (let k = 1; k <= 9; k++) {
+    const [x, y] = P(k);
+    dots += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${labels ? 11 : 9}" fill="${k % 3 === 0 ? "#E8772E" : "#F5C044"}" stroke="#fff" stroke-width="2.5"/>`;
+    if (labels) dots += `<text x="${x.toFixed(1)}" y="${(y + 4.5).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" font-family="Fraunces, Georgia, serif" fill="#1E4636">${k}</text>`;
+  }
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="100" cy="100" r="72" fill="none" stroke="#1E4636" stroke-width="${labels ? 3 : 10}"/>
+    <polygon points="${pts([1, 4, 2, 8, 5, 7])}" fill="none" stroke="#2F6B53" stroke-width="${labels ? 2.2 : 8}" stroke-linejoin="round" opacity=".85"/>
+    <polygon points="${pts([3, 6, 9])}" fill="rgba(232,119,46,.08)" stroke="#E8772E" stroke-width="${labels ? 2.8 : 9}" stroke-linejoin="round"/>
+    ${labels ? dots : ""}</svg>`;
+}
+
+/* =========================================================
+   4. 질문지
+   - ax: center / horn / harm  → 숨은 세 축을 측정 (v = 그룹)
+   - ax: motive                → 핵심 동기·두려움을 측정 (w = 유형별 가중치)
+   ========================================================= */
+const QUESTIONS = [
+  // ── 축 1: 반응의 중심 (본능 / 감정 / 사고)
+  { id: "a1", ax: "center", text: "처음 가 보는 도시에 도착했다. 숙소에 짐을 풀고 가장 먼저 하는 일은?", opts: [
+    { t: "일단 밖으로 나가 동네를 걸으며 분위기를 몸으로 느낀다", v: "gut" },
+    { t: "이 여행을 어떤 장면으로 기억하고 싶은지, 누구와 나누고 싶은지 떠올린다", v: "heart" },
+    { t: "지도와 후기를 보며 동선과 정보를 정리한다", v: "head" }] },
+  { id: "a2", ax: "center", text: "누군가에게 부당한 말을 들은 날 밤, 가장 오래 남아 있는 것은?", opts: [
+    { t: "그 순간 몸에 확 올라왔던 열기, ‘그냥 넘기면 안 됐는데’ 하는 느낌", v: "gut" },
+    { t: "그 사람이 나를 어떤 사람으로 보고 있는 걸까 하는 마음", v: "heart" },
+    { t: "왜 그런 말을 했는지, 다음엔 어떻게 대응할지에 대한 시나리오", v: "head" }] },
+  { id: "a3", ax: "center", text: "중요한 선택을 앞두고, 마지막 순간에 기대게 되는 것은?", opts: [
+    { t: "설명하긴 어렵지만 ‘이거다’ 싶은 감", v: "gut" },
+    { t: "이 선택이 나와 내 사람들에게 어떤 의미인지", v: "heart" },
+    { t: "충분히 따져 본 근거와 장단점", v: "head" }] },
+  { id: "a4", ax: "center", text: "영화를 보고 나오며 가장 먼저 꺼내게 되는 말은?", opts: [
+    { t: "“와, 몰입감 장난 아니다” 혹은 “좀 늘어지던데”", v: "gut" },
+    { t: "“주인공 마음이 너무 이해돼서 먹먹했어”", v: "heart" },
+    { t: "“근데 그 설정 말이 돼? 그 복선은 뭐였지?”", v: "head" }] },
+  { id: "a5", ax: "center", text: "스트레스가 쌓이면 가장 먼저 나타나는 신호는?", opts: [
+    { t: "어깨와 턱에 힘이 들어가고, 사소한 일에 욱한다", v: "gut" },
+    { t: "마음이 가라앉고, 누가 좀 알아줬으면 싶어진다", v: "heart" },
+    { t: "생각이 꼬리를 물어서 잠들기가 어렵다", v: "head" }] },
+  { id: "a6", ax: "center", text: "새로 산 가전제품이 집에 도착했다.", opts: [
+    { t: "설명서는 제쳐 두고 일단 이것저것 눌러 본다", v: "gut" },
+    { t: "집 안 어디에 두면 예쁠지, 누구에게 보여 줄지 생각한다", v: "heart" },
+    { t: "설명서나 사용 후기를 먼저 꼼꼼히 읽는다", v: "head" }] },
+  { id: "a7", ax: "center", text: "계획에 없던 부탁을 갑자기 받았다. 가장 먼저 드는 것은?", opts: [
+    { t: "내 영역에 훅 들어온 느낌. 할지 말지 몸이 먼저 반응한다", v: "gut" },
+    { t: "거절하면 서운해할까, 상대 표정이 먼저 떠오른다", v: "heart" },
+    { t: "이걸 하면 내 일정에 어떤 영향이 있을지 계산한다", v: "head" }] },
+
+  // ── 축 2: 호니비안 (주장형 / 의무형 / 후퇴형)
+  { id: "b1", ax: "horn", text: "회의에서 의견이 팽팽하게 갈렸다.", opts: [
+    { t: "내 의견을 분명히 밝히고 결론 쪽으로 끌고 간다", v: "asr" },
+    { t: "모두가 납득할 수 있는 기준이나 절차를 찾는다", v: "comp" },
+    { t: "일단 듣고, 혼자 정리한 뒤 나중에 말한다", v: "wd" }] },
+  { id: "b2", ax: "horn", text: "갖고 싶은 것, 혹은 하고 싶은 것이 생겼을 때.", opts: [
+    { t: "바로 요청하거나 직접 손에 넣으러 간다", v: "asr" },
+    { t: "해야 할 일은 다 했는지, 지금 그래도 되는지 먼저 따져 본다", v: "comp" },
+    { t: "굳이 드러내지 않고 한동안 혼자 품고 있는다", v: "wd" }] },
+  { id: "b3", ax: "horn", text: "아무 계획 없는 주말 아침.", opts: [
+    { t: "뭔가를 시작하거나 사람들을 불러 모은다", v: "asr" },
+    { t: "미뤄 둔 할 일 목록부터 하나씩 처리한다", v: "comp" },
+    { t: "방해받지 않는 혼자만의 시간을 늘어지게 즐긴다", v: "wd" }] },
+  { id: "b4", ax: "horn", text: "낯선 사람들이 모인 자리에 처음 갔다.", opts: [
+    { t: "먼저 말을 걸고 분위기를 만든다", v: "asr" },
+    { t: "이 모임의 분위기와 암묵적인 규칙을 파악해 맞춘다", v: "comp" },
+    { t: "한쪽에서 관찰하다가 천천히 섞인다", v: "wd" }] },
+  { id: "b5", ax: "horn", text: "팀 과제가 계속 늦어지고 있다.", opts: [
+    { t: "역할을 다시 나누고 속도를 올리자고 나선다", v: "asr" },
+    { t: "내 몫부터 책임지고 끝내고, 다른 사람도 그러길 기대한다", v: "comp" },
+    { t: "갈등에서 한 발 떨어져 조용히 내 부분에 몰두한다", v: "wd" }] },
+  { id: "b6", ax: "horn", text: "식당에서 주문한 것과 다른 음식이 나왔다.", opts: [
+    { t: "바로 말해서 바꿔 달라고 한다", v: "asr" },
+    { t: "직원이 곤란하지 않도록 예의 바르게 조심스럽게 말한다", v: "comp" },
+    { t: "말하기 번거로워서 그냥 먹는다", v: "wd" }] },
+  { id: "b7", ax: "horn", text: "지친 하루 끝에 기운을 되찾는 방법은?", opts: [
+    { t: "밖으로 나가 몸을 쓰거나 뭔가를 해치운다", v: "asr" },
+    { t: "해야 할 일 하나를 마무리하면 그제야 마음이 놓인다", v: "comp" },
+    { t: "연락을 잠시 끊고 혼자만의 공간으로 들어간다", v: "wd" }] },
+
+  // ── 축 3: 하모닉 (긍정형 / 역량형 / 반응형)
+  { id: "c1", ax: "harm", text: "가까운 사람과 갈등이 생겼다.", opts: [
+    { t: "좋은 면을 떠올리며 분위기를 부드럽게 풀려고 한다", v: "pos" },
+    { t: "감정은 잠시 접어 두고 무엇이 문제인지 정리한다", v: "cmp" },
+    { t: "내 감정을 먼저 표현하고, 상대가 어떻게 반응하는지 확인하고 싶다", v: "rea" }] },
+  { id: "c2", ax: "harm", text: "기대했던 계획이 크게 틀어졌다.", opts: [
+    { t: "“오히려 잘됐어” 하고 다른 가능성을 찾는다", v: "pos" },
+    { t: "원인을 파악하고 대안을 세운다", v: "cmp" },
+    { t: "일단 속상하거나 화가 나고, 그걸 누군가와 나눠야 정리된다", v: "rea" }] },
+  { id: "c3", ax: "harm", text: "누군가 나에게 화를 낸다.", opts: [
+    { t: "웃거나 넘기면서 분위기를 누그러뜨린다", v: "pos" },
+    { t: "그 말에서 사실과 감정을 구분해서 듣는다", v: "cmp" },
+    { t: "나도 비슷한 강도로 감정이 올라온다", v: "rea" }] },
+  { id: "c4", ax: "harm", text: "친구가 안 좋은 소식을 전했다. 나도 모르게 나오는 말은?", opts: [
+    { t: "“그래도 괜찮을 거야, 분명 좋은 쪽으로 풀릴 거야”", v: "pos" },
+    { t: "“그럼 이제 뭘 하면 될까?”", v: "cmp" },
+    { t: "“진짜 속상하다, 어떻게 그럴 수가 있어”", v: "rea" }] },
+  { id: "c5", ax: "harm", text: "힘든 하루를 보낸 뒤.", opts: [
+    { t: "좋았던 일 하나를 떠올리며 털어 버린다", v: "pos" },
+    { t: "무엇이 잘못됐는지 차근차근 되짚어 본다", v: "cmp" },
+    { t: "누군가에게 털어놓아야 비로소 풀린다", v: "rea" }] },
+  { id: "c6", ax: "harm", text: "사람들이 나에 대해 자주 하는 오해에 가장 가까운 것은?", opts: [
+    { t: "“넌 늘 괜찮은 줄 알았어”", v: "pos" },
+    { t: "“생각보다 차갑다, 감정이 없는 것 같다”", v: "cmp" },
+    { t: "“예민하다, 감정 기복이 있다”", v: "rea" }] },
+  { id: "c7", ax: "harm", text: "일이 잘못된 걸 처음 알았을 때 튀어나오는 말은?", opts: [
+    { t: "“에이, 별일 아니야”", v: "pos" },
+    { t: "“어디서부터 꼬였지?”", v: "cmp" },
+    { t: "“아니, 이게 말이 돼?”", v: "rea" }] },
+
+  // ── 핵심 동기 / 두려움 (유형을 직접 가리키되, 모든 선택지를 비슷한 무게로)
+  { id: "d1", ax: "motive", text: "다음 중 가장 듣기 싫은 말은?", opts: [
+    { t: "“대충 했네. 이것도 제대로 못 해?”", w: { 1: 1 } },
+    { t: "“너 없어도 괜찮아. 신경 안 써도 돼”", w: { 2: 1 } },
+    { t: "“결국 보여 준 게 없네”", w: { 3: 1 } },
+    { t: "“너도 그냥 남들이랑 똑같구나”", w: { 4: 1 } }] },
+  { id: "d2", ax: "motive", text: "이번에는 이 중에서 가장 듣기 싫은 말은?", opts: [
+    { t: "“그것도 몰라? 잘 모르면서 끼어드네”", w: { 5: 1 } },
+    { t: "“이제부터는 아무도 안 도와줄 거야. 혼자 알아서 해”", w: { 6: 1 } },
+    { t: "“앞으로 몇 년간 매일 똑같은 일만 하게 될 거야”", w: { 7: 1 } },
+    { t: "“생각보다 약하네”", w: { 8: 1 } }] },
+  { id: "d3", ax: "motive", text: "다음 중 가장 피하고 싶은 상황은?", opts: [
+    { t: "날 선 긴장감이 흐르는 자리에 오래 앉아 있어야 할 때", w: { 9: 1 } },
+    { t: "우유부단한 사람이 일을 이끄는 걸 지켜보기만 해야 할 때", w: { 8: 1 } },
+    { t: "공들여 준비한 것이 사람들 앞에서 실패로 보이는 순간", w: { 3: 1 } },
+    { t: "아무 즐거움 없는 반복 일정이 몇 달째 이어질 때", w: { 7: 1 } }] },
+  { id: "d4", ax: "motive", text: "이 중 가장 오래 마음에 남을 것 같은 말은?", opts: [
+    { t: "“네 덕분에 정말 살았어”", w: { 2: 1 } },
+    { t: "“너만 표현할 수 있는 분위기가 있어”", w: { 4: 1 } },
+    { t: "“너라서 믿고 맡길 수 있어”", w: { 6: 1 } },
+    { t: "“너랑 있으면 마음이 편해”", w: { 9: 1 } }] },
+  { id: "d5", ax: "motive", text: "이번에는 이 중 가장 오래 마음에 남을 것 같은 말은?", opts: [
+    { t: "“넌 기준이 분명하고 늘 바르다”", w: { 1: 1 } },
+    { t: "“어떻게 그런 것까지 알고 있어?”", w: { 5: 1 } },
+    { t: "“너 있으면 어디든 재밌어”", w: { 7: 1 } },
+    { t: "“너 진짜 든든하고 강하다”", w: { 8: 1 } }] },
+  { id: "d6", ax: "motive", text: "잠들기 전, 머릿속을 자주 맴도는 것은?", opts: [
+    { t: "오늘 더 잘했어야 했던 일, 바로잡아야 할 것", w: { 1: 1 } },
+    { t: "혹시 생길지 모르는 문제와 그에 대한 대비", w: { 6: 1 } },
+    { t: "내가 남들과 비교해 지금 어디쯤 와 있는지", w: { 3: 1 } },
+    { t: "내 마음이 왜 이런지, 나는 어떤 사람인지", w: { 4: 1 } }] },
+  { id: "d7", ax: "motive", text: "친구가 고민을 털어놓는다. 나도 모르게 하게 되는 행동은?", opts: [
+    { t: "필요한 걸 챙겨 주고 직접 발 벗고 나선다", w: { 2: 1 } },
+    { t: "관련 정보를 찾아보고 상황을 구조적으로 설명해 준다", w: { 5: 1 } },
+    { t: "기분 전환부터 하자며 맛있는 곳이나 재밌는 데로 데려간다", w: { 7: 1 } },
+    { t: "끝까지 들어 주며 고개를 끄덕인다. 내 의견은 크게 내지 않는다", w: { 9: 1 } }] },
+  { id: "d8", ax: "motive", text: "갑자기 일주일의 자유 시간이 생겼다.", opts: [
+    { t: "평소 못 해 본 경험을 최대한 많이 몰아서 해 본다", w: { 7: 1 } },
+    { t: "방해받지 않고 궁금했던 분야를 깊이 파고든다", w: { 5: 1 } },
+    { t: "미뤄 둔 목표를 해치우고 다음 단계를 준비한다", w: { 3: 1 } },
+    { t: "특별한 계획 없이 흘러가는 대로 편하게 보낸다", w: { 9: 1 } }] },
+  { id: "d9", ax: "motive", text: "은근히 가장 불편하게 느껴지는 사람은?", opts: [
+    { t: "규칙을 아무렇지 않게 어기는 사람", w: { 1: 1 } },
+    { t: "앞에서와 뒤에서가 달라 속을 알 수 없는 사람", w: { 6: 1 } },
+    { t: "나를 자기 뜻대로 움직이려는 사람", w: { 8: 1 } },
+    { t: "진심 없이 형식적으로만 대하는 사람", w: { 4: 1 } }] },
+  { id: "d10", ax: "motive", text: "여럿이 모이면 나도 모르게 맡게 되는 역할은?", opts: [
+    { t: "빠진 사람은 없는지, 다들 괜찮은지 챙기는 역할", w: { 2: 1 } },
+    { t: "결과를 정리해서 대표로 보여 주는 역할", w: { 3: 1 } },
+    { t: "다들 놓친 위험 요소를 먼저 짚어 주는 역할", w: { 6: 1 } },
+    { t: "모두 망설일 때 결정을 내리고 밀어붙이는 역할", w: { 8: 1 } }] },
+  { id: "d11", ax: "motive", text: "가까운 사람에게 들어 본 적 있는 불평에 가장 가까운 것은?", opts: [
+    { t: "“너무 깐깐해. 잔소리 좀 그만해”", w: { 1: 1 } },
+    { t: "“부탁도 안 했는데 왜 그렇게까지 신경 써?”", w: { 2: 1 } },
+    { t: "“너무 바빠. 맨날 일 얘기만 해”", w: { 3: 1 } }] },
+  { id: "d12", ax: "motive", text: "가까운 사람에게 들어 본 적 있는 불평에 가장 가까운 것은?", opts: [
+    { t: "“왜 그렇게 혼자 가라앉아 있어?”", w: { 4: 1 } },
+    { t: "“연락이 너무 안 돼. 선을 너무 긋는 것 같아”", w: { 5: 1 } },
+    { t: "“걱정이 너무 많아. 왜 그렇게 의심해?”", w: { 6: 1 } }] },
+  { id: "d13", ax: "motive", text: "가까운 사람에게 들어 본 적 있는 불평에 가장 가까운 것은?", opts: [
+    { t: "“진득하지가 못해. 계획을 자꾸 바꿔”", w: { 7: 1 } },
+    { t: "“말이 너무 세. 좀 부드럽게 해”", w: { 8: 1 } },
+    { t: "“그래서 네 생각은 뭐야? 결정 좀 해”", w: { 9: 1 } }] },
+  { id: "d14", ax: "motive", text: "인생에서 ‘이것만은 지키고 싶다’에 가장 가까운 것은?", opts: [
+    { t: "흔들리지 않는 마음의 평화", w: { 9: 1 } },
+    { t: "누구에게도 휘둘리지 않고 내 삶을 결정할 힘", w: { 8: 1 } },
+    { t: "남과 다른, 진짜 나다운 삶", w: { 4: 1 } },
+    { t: "매일이 새롭고 자유로운 삶", w: { 7: 1 } }] },
+  { id: "d15", ax: "motive", text: "다시 한번, ‘이것만은 지키고 싶다’에 가장 가까운 것은?", opts: [
+    { t: "스스로에게 부끄럽지 않은 바른 삶", w: { 1: 1 } },
+    { t: "사랑하는 사람들에게 꼭 필요한 존재", w: { 2: 1 } },
+    { t: "노력한 만큼 인정받는 삶", w: { 3: 1 } },
+    { t: "세상을 깊이 이해하는 지혜", w: { 5: 1 } }] }
+];
+const QMAP = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
+
+// 출제 순서: 같은 축·비슷한 문항이 연달아 나오지 않도록 섞어 둔 고정 순서
+const ORDER = ["a1","b3","d4","c2","a6","d7","b1","c1","d1","a3","b4","d8","c4","d11","a2","b2","d6","c6",
+               "a4","d3","b6","d12","c3","d9","a5","b5","d5","c5","d14","a7","d10","b7","d2","c7","d13","d15"];
+
+const HINTS = [
+  "가장 먼저 떠오른 쪽을 고르세요.",
+  "‘그래야 한다’가 아니라 ‘실제로 그렇다’를 고르세요.",
+  "최근 1년, 피곤한 평일의 나를 떠올려 보세요.",
+  "모든 선택지는 똑같이 괜찮은 답이에요.",
+  "딱 맞는 게 없다면, 조금이라도 더 가까운 쪽으로."
+];
+
+// 헷갈리기 쉬운 두 유형 구분 팁
+const PAIR_TIPS = {
+  "1-2": "둘 다 ‘해야 할 일’에 성실하지만, 1번은 옳은 일을 하려 하고 2번은 사람에게 필요한 일을 하려 합니다. 아무도 고마워하지 않아도 그 일을 하겠다면 1번에 가깝습니다.",
+  "1-3": "둘 다 일을 잘 해내지만, 1번은 ‘옳게’, 3번은 ‘성공적으로’ 해내려 합니다. 아무도 보지 않아도 끝까지 고친다면 1번, 결과가 인정받는 순간이 가장 뿌듯하다면 3번입니다.",
+  "1-5": "둘 다 정확함을 중시하지만, 1번은 행동이 옳은지를, 5번은 이해가 정확한지를 따집니다.",
+  "1-6": "둘 다 책임감 있고 규칙을 중시하지만, 1번은 “이게 옳은가?”를 묻고 6번은 “이게 안전한가, 믿을 만한가?”를 묻습니다. 기준이 내 안에 있으면 1번, 믿을 만한 대상과 대비에 있으면 6번입니다.",
+  "1-9": "둘 다 본능 중심이라 분노를 직접 드러내지 않지만, 1번은 분노를 ‘바로잡는 힘’으로 쓰고 9번은 분노 자체를 잠재워 버립니다.",
+  "2-3": "둘 다 사람의 반응에 민감하지만, 2번은 ‘필요한 사람’이, 3번은 ‘인정받는 사람’이 되고 싶어 합니다.",
+  "2-4": "둘 다 감정이 풍부하지만, 2번의 시선은 상대의 감정에, 4번의 시선은 자신의 감정에 머뭅니다.",
+  "2-6": "둘 다 헌신적이지만, 2번은 사랑받기 위해 다가가고 6번은 믿을 수 있는 관계인지 확인하며 다가갑니다.",
+  "2-7": "둘 다 밝고 사교적이지만, 2번의 에너지는 사람을 향하고 7번의 에너지는 경험을 향합니다.",
+  "2-9": "둘 다 다정하지만, 2번은 먼저 다가가 필요를 채우고 ‘알아주길’ 바라며, 9번은 갈등 없이 함께 흘러가는 것으로 충분합니다. 도와준 뒤 서운함이 남는다면 2번에 가깝습니다.",
+  "3-7": "둘 다 바쁘고 활동적이지만, 일정이 꽉 찬 이유가 ‘해내야 해서’라면 3번, ‘놓치기 싫어서’라면 7번입니다.",
+  "3-8": "둘 다 추진력이 강하지만, 3번은 “어떻게 보일까”를, 8번은 “누가 주도권을 쥐고 있나”를 의식합니다.",
+  "4-5": "둘 다 물러나 자기만의 세계가 있지만, 4번은 감정 속으로 깊이 들어가고 5번은 감정에서 한 걸음 떨어져 관찰합니다.",
+  "4-6": "둘 다 마음이 크게 출렁이지만, 4번은 ‘나다움과 결핍’을 두고, 6번은 ‘안전과 신뢰’를 두고 흔들립니다.",
+  "5-6": "둘 다 머리 중심이라 생각이 많지만, 5번은 혼자 이해해서 대비하고 6번은 믿을 만한 사람이나 체계에 기대어 대비합니다.",
+  "5-9": "둘 다 조용히 물러나 있지만, 5번은 머릿속이 바쁘게 돌아가고 9번은 머릿속까지 고요해지려 합니다.",
+  "6-8": "둘 다 강하게 맞설 수 있지만, 6번(특히 공포대항형)은 불안에서 출발해 먼저 대응하고, 8번은 약해 보이기 싫은 마음에서 힘을 씁니다.",
+  "6-9": "둘 다 갈등을 꺼리지만, 6번은 머릿속으로 최악의 상황을 시뮬레이션하고 9번은 아예 생각을 꺼 둡니다.",
+  "7-9": "둘 다 긍정적이지만, 7번은 자극과 새로움을 찾아 움직이고 9번은 지금의 편안함을 지키려 합니다.",
+  "8-9": "둘 다 본능 중심이라 고집이 있지만, 8번은 밀고 나가는 방식으로, 9번은 꿈쩍하지 않는 방식으로 버팁니다."
+};
+
+/* =========================================================
+   5. 상태 & 화면 전환
+   ========================================================= */
+const $ = s => document.querySelector(s);
+let S;
+function resetState() { S = { idx: 0, answers: {}, optOrder: {}, lock: false }; }
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  window.scrollTo(0, 0);
+}
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function renderQ() {
+  const id = ORDER[S.idx], q = QMAP[id];
+  if (!S.optOrder[id]) S.optOrder[id] = shuffle(q.opts.map((_, i) => i)); // 선택지 순서를 매번 섞어 패턴 노출 방지
+  $("#qNum").textContent = S.idx + 1;
+  $("#qTotal").textContent = ORDER.length;
+  $("#bar").style.width = (S.idx / ORDER.length * 100) + "%";
+  $("#scene").textContent = "Scene " + String(S.idx + 1).padStart(2, "0");
+  $("#qText").textContent = q.text;
+  $("#hint").textContent = HINTS[S.idx % HINTS.length];
+  const box = $("#opts"); box.innerHTML = "";
+  S.optOrder[id].forEach((oi, pos) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt" + (S.answers[id] === oi ? " sel" : "");
+    b.innerHTML = `<span class="k">${"ABCD"[pos]}</span><span class="t"></span>`;
+    b.querySelector(".t").textContent = q.opts[oi].t;
+    b.addEventListener("click", () => choose(oi, b));
+    box.appendChild(b);
+  });
+  const card = $("#qcard"); card.classList.remove("swap"); void card.offsetWidth; card.classList.add("swap");
+}
+function choose(oi, btn) {
+  if (S.lock) return; S.lock = true;
+  S.answers[ORDER[S.idx]] = oi;
+  document.querySelectorAll(".opt").forEach(x => x.classList.remove("sel"));
+  btn.classList.add("sel");
+  $("#bar").style.width = ((S.idx + 1) / ORDER.length * 100) + "%";
+  setTimeout(() => {
+    S.lock = false;
+    if (S.idx < ORDER.length - 1) { S.idx++; renderQ(); } else finish();
+  }, 280);
+}
+function goBack() {
+  if (S.idx === 0) { show("intro"); return; }
+  S.idx--; renderQ();
+}
+function finish() {
+  show("loading");
+  const steps = ["반응의 중심을 확인하고 있어요…", "원하는 것에 다가가는 방식을 보고 있어요…", "어려움을 다루는 방식을 살피고 있어요…", "핵심 동기와 교차 검증하고 있어요…"];
+  let i = 0; $("#loadStep").textContent = steps[0];
+  const tm = setInterval(() => { i++; if (i < steps.length) $("#loadStep").textContent = steps[i]; }, 520);
+  setTimeout(() => { clearInterval(tm); renderResult(); show("result"); animateBars(); }, 2200);
+}
+
+/* =========================================================
+   6. 채점 로직
+   ---------------------------------------------------------
+   (A) 숨은 축 점수: 각 축에서 그 유형이 속한 그룹을 고른 비율의 평균 (0~1)
+   (B) 핵심 동기 점수: 해당 유형을 가리킨 선택 수 ÷ 그 유형이 등장한 문항 수 (0~1)
+   최종 = 0.5 × A + 0.5 × B
+   ========================================================= */
+function compute() {
+  const cnt = { center: { gut: 0, heart: 0, head: 0 }, horn: { asr: 0, comp: 0, wd: 0 }, harm: { pos: 0, cmp: 0, rea: 0 } };
+  const tot = { center: 0, horn: 0, harm: 0 };
+  const direct = {}, maxD = {}, evidence = {};
+  for (let t = 1; t <= 9; t++) { direct[t] = 0; maxD[t] = 0; evidence[t] = []; }
+
+  QUESTIONS.forEach(q => {
+    const a = S.answers[q.id]; if (a == null) return;
+    const opt = q.opts[a];
+    if (q.ax === "motive") {
+      for (let t = 1; t <= 9; t++) maxD[t] += Math.max(0, ...q.opts.map(o => o.w[t] || 0));
+      for (const [t, v] of Object.entries(opt.w)) { direct[t] += v; evidence[t].push({ q: q.text, a: opt.t }); }
+    } else { cnt[q.ax][opt.v]++; tot[q.ax]++; }
+  });
+
+  const p = {};
+  for (const ax in cnt) { p[ax] = {}; for (const g in cnt[ax]) p[ax][g] = tot[ax] ? cnt[ax][g] / tot[ax] : 0; }
+  const argmax = o => Object.keys(o).reduce((a, b) => (o[b] > o[a] ? b : a));
+  const dom = { center: argmax(p.center), horn: argmax(p.horn), harm: argmax(p.harm) };
+  const structType = +Object.keys(TYPE_AX).find(t => TYPE_AX[t].center === dom.center && TYPE_AX[t].horn === dom.horn && TYPE_AX[t].harm === dom.harm);
+
+  const scores = [];
+  for (let t = 1; t <= 9; t++) {
+    const ta = TYPE_AX[t];
+    const axis = (p.center[ta.center] + p.horn[ta.horn] + p.harm[ta.harm]) / 3;
+    const dir = maxD[t] ? direct[t] / maxD[t] : 0;
+    scores.push({ t, axis, dir, total: 0.5 * axis + 0.5 * dir });
+  }
+  scores.sort((a, b) => b.total - a.total || b.dir - a.dir || b.axis - a.axis);
+  const directTop = scores.slice().sort((a, b) => b.dir - a.dir || b.total - a.total)[0].t;
+
+  const top = scores[0].t, gap = scores[0].total - scores[1].total;
+  const agree = (structType === top) + (directTop === top);
+  let conf;
+  if (gap >= 0.08 && agree === 2) conf = { key: "high", label: "높음", text: "숨은 세 축과 핵심 동기가 모두 같은 유형을 가리키고, 2위와의 차이도 뚜렷해요." };
+  else if (gap >= 0.04 || agree >= 1) conf = { key: "mid", label: "보통", text: "대체로 일관되지만 2위 유형의 특징도 함께 보여요. 아래 비교를 꼭 읽어 보세요." };
+  else conf = { key: "low", label: "탐색 필요", text: "여러 유형의 특징이 고르게 나타났어요. 상위 유형들의 ‘핵심 두려움’을 비교해 보세요." };
+
+  return { p, dom, structType, directTop, scores, direct, maxD, evidence, gap, conf };
+}
+
+/* =========================================================
+   7. 결과 화면
+   ========================================================= */
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+let lastText = "";
+
+function renderResult() {
+  const R = compute();
+  const top = R.scores[0], t = top.t, T = TYPES[t];
+  const second = R.scores[1], third = R.scores[2];
+  const fit = Math.round(top.total * 100);
+
+  // (A) 세 축 설명
+  const axisHTML = Object.entries(AXES).map(([ax, meta]) => {
+    const tg = TYPE_AX[t][ax], ud = R.dom[ax];
+    const segs = Object.entries(meta.groups).map(([g, gm]) => {
+      const pct = Math.round(R.p[ax][g] * 100);
+      return `<div class="${g === tg ? "on" : "off"}" data-grow="${Math.max(pct, 0.5)}" style="flex-grow:1">${pct >= 18 ? esc(gm.name) + " " + pct + "%" : ""}</div>`;
+    }).join("");
+    const legend = Object.entries(meta.groups).map(([g, gm]) =>
+      `<span class="${g === ud ? "me" : ""}">${esc(gm.name)} ${Math.round(R.p[ax][g] * 100)}%</span>`).join("");
+    const pctT = Math.round(R.p[ax][tg] * 100);
+    const badge = ud === tg ? `<span class="tagok">✓ 가장 강한 경향과 일치</span>`
+                            : `<span class="tagsoft">가장 강한 경향은 ${esc(meta.groups[ud].name)}</span>`;
+    return `<div class="axis">
+      <div class="axis-head">${esc(meta.title)} — ${t}번 유형은 <b>${esc(meta.groups[tg].name)}</b>(${esc(meta.groups[tg].desc)}). 당신의 응답 중 <b>${pctT}%</b>${badge}</div>
+      <div class="seg">${segs}</div><div class="legend">${legend}</div></div>`;
+  }).join("");
+
+  const domNames = ["center", "horn", "harm"].map(ax => AXES[ax].groups[R.dom[ax]].name).join(" · ");
+  const structMsg = R.structType === t
+    ? `세 축에서 가장 강하게 나온 조합(<b>${esc(domNames)}</b>)은 9가지 유형 중 <b>오직 ${t}번 유형</b>에만 해당하는 조합이에요.`
+    : `세 축만 놓고 보면 <b>${esc(domNames)}</b> 조합, 즉 <b>${R.structType}번</b> 유형의 구조가 가장 강했어요. 하지만 핵심 동기 문항까지 함께 보면 <b>${t}번</b>의 점수가 더 높았습니다.`;
+
+  // (B) 핵심 동기 근거
+  const ev = R.evidence[t];
+  const evHTML = ev.length
+    ? `<ul class="evi">${ev.slice(0, 4).map(e => `<li><div class="q">${esc(e.q)}</div><div class="a">→ ${esc(e.a)}</div></li>`).join("")}</ul>`
+    : `<p class="empty">핵심 동기 문항에서는 ${t}번을 직접 가리키는 선택이 없었어요. 이번 결과는 주로 숨은 세 축의 반응 패턴에서 나왔습니다.</p>`;
+  const directMsg = R.directTop === t
+    ? `핵심 동기 문항만 따로 계산해도 <b>${t}번</b>이 가장 높았어요. 두 갈래의 분석이 같은 곳을 가리킵니다.`
+    : `핵심 동기 문항만 따로 보면 <b>${R.directTop}번 ${esc(TYPES[R.directTop].name)}</b>의 점수가 가장 높았어요. 두 유형을 함께 읽어 보세요.`;
+
+  // 헷갈리는 유형 비교
+  let pairHTML = "";
+  if (R.conf.key !== "high" || R.gap < 0.06) {
+    const a = Math.min(t, second.t), b = Math.max(t, second.t);
+    const tip = PAIR_TIPS[a + "-" + b] || `${a}번과 ${b}번은 겉으로 드러나는 행동이 비슷해 보일 수 있지만, 그 행동을 움직이는 ‘이유’가 다릅니다.`;
+    pairHTML = `<section class="section">
+      <h3><span class="dot"></span>${t}번과 ${second.t}번 사이에서 고민된다면</h3>
+      <p class="sub">1위와 2위의 점수 차이가 ${Math.round(R.gap * 100)}점이에요. 행동이 아니라 ‘동기’로 구분해 보세요.</p>
+      <p style="margin:0 0 16px">${esc(tip)}</p>
+      <div class="grid2">${[t, second.t].map(n => `<div class="box"><h4>${n}번 ${esc(TYPES[n].name)}의 핵심 두려움</h4><p><b>${esc(TYPES[n].fear)}</b></p></div>`).join("")}</div>
+      <p class="sub" style="margin:14px 0 0">두 문장을 소리 내어 읽어 보세요. 더 아프게, 더 오래 마음에 걸리는 쪽이 당신일 가능성이 높습니다.</p>
+    </section>`;
+  }
+
+  const barsHTML = R.scores.map((s, i) => `<div class="brow${i === 0 ? " top" : ""}">
+      <div class="mini">${ART[s.t]}</div>
+      <div class="nm"><b>${s.t}번</b> ${esc(TYPES[s.t].name)} · ${esc(TYPES[s.t].char)}</div>
+      <div class="track"><div class="fill" data-w="${Math.round(s.total * 100)}"></div></div>
+      <div class="pc">${Math.round(s.total * 100)}%</div></div>`).join("");
+
+  const runnerHTML = [second, third].map((s, i) => `<div class="rcard">
+      <div class="mini">${ART[s.t]}</div>
+      <div><div class="rk">${i + 2}순위 · ${Math.round(s.total * 100)}%</div>
+      <div class="rn">${s.t}번 ${esc(TYPES[s.t].name)} · ${esc(TYPES[s.t].char)}</div>
+      <div class="rt">${esc(TYPES[s.t].tagline)}</div></div></div>`).join("");
+
+  const galleryHTML = Object.keys(TYPES).map(n => {
+    const X = TYPES[n];
+    return `<div class="gitem${+n === t ? " me" : ""}"><div class="mini">${ART[n]}</div>
+      <div class="gn">${n}번 ${esc(X.name)}</div><div class="gc">${esc(X.char)}</div><div class="gt">${esc(X.tagline)}</div>
+      <details><summary>자세히 보기</summary><p>${esc(X.desc)}</p><p><b>핵심 욕구</b> ${esc(X.desire)}<br><b>핵심 두려움</b> ${esc(X.fear)}</p></details></div>`;
+  }).join("");
+
+  $("#result").innerHTML = `
+    <div class="r-hero">
+      <div class="r-art">${ART[t]}</div>
+      <div>
+        <div class="r-label">당신에게 가장 가까운 에니어그램 유형은</div>
+        <div class="r-type"><span class="n">${t}번</span> ${esc(T.name)}</div>
+        <div class="r-meta"><span class="pill">${esc(T.char)}</span><span class="r-en">${esc(T.en)}</span></div>
+        <p class="r-tagline">“${esc(T.tagline)}”</p>
+        <div class="stats">
+          <div class="stat"><b>${fit}%</b><span>응답 일치도</span></div>
+          <div class="stat"><b>${esc(R.conf.label)}</b><span>결과 신뢰도</span></div>
+          <div class="stat"><b>${second.t}번</b><span>두 번째로 가까운 유형</span></div>
+        </div>
+        <p class="r-desc">${esc(T.desc)}</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <h3><span class="dot"></span>왜 ${t}번 유형이 나왔나요?</h3>
+      <p class="sub">${esc(R.conf.text)} Lovegram은 36개의 장면을 두 갈래로 나누어 분석했어요.</p>
+
+      <div class="part">Part 1 · 숨은 세 가지 축 (21문항)</div>
+      <p class="sub" style="margin:0">질문의 의도가 드러나지 않도록, 유형이 아니라 ‘반응 방식’만 측정한 문항들이에요.</p>
+      ${axisHTML}
+      <div class="callout">${structMsg}</div>
+
+      <div class="part">Part 2 · 핵심 동기와 두려움 (15문항)</div>
+      <p class="sub" style="margin:0 0 4px">${t}번 유형의 동기를 가리키는 선택지를 <b>${R.maxD[t]}번의 기회 중 ${R.direct[t]}번</b> 골랐어요. ${directMsg}</p>
+      ${evHTML}
+    </section>
+
+    ${pairHTML}
+
+    <section class="section">
+      <h3><span class="dot"></span>${t}번 ${esc(T.name)} 더 알아보기</h3>
+      <p class="sub">결과를 ‘정답’이 아닌 ‘나를 이해하는 출발점’으로 읽어 주세요.</p>
+      <div class="grid2">
+        <div class="box"><h4>핵심 욕구</h4><p><b>${esc(T.desire)}</b></p></div>
+        <div class="box"><h4>핵심 두려움</h4><p><b>${esc(T.fear)}</b></p></div>
+        <div class="box"><h4>강점</h4><div class="tags">${T.strengths.map(s => `<span>${esc(s)}</span>`).join("")}</div></div>
+        <div class="box"><h4>성장 포인트</h4><p>${esc(T.growth)}</p></div>
+        <div class="box why"><h4>왜 ‘${esc(T.char)}’인가요?</h4><p>${esc(T.why)}</p></div>
+        <div class="box myth"><h4>이 유형에 대한 흔한 오해</h4><p>${esc(T.myth)}</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3><span class="dot"></span>9가지 유형별 일치도</h3>
+      <p class="sub">숨은 축 점수와 핵심 동기 점수를 반씩 합산한 값이에요.</p>
+      <div class="bars">${barsHTML}</div>
+    </section>
+
+    <section class="section">
+      <h3><span class="dot"></span>함께 읽어 볼 유형</h3>
+      <p class="sub">에니어그램에서는 가까운 순위의 유형이 ‘날개’나 ‘착각하기 쉬운 유형’일 수 있어요.</p>
+      <div class="runner">${runnerHTML}</div>
+    </section>
+
+    <div class="actions">
+      <button class="btn orange" id="copyBtn">결과 복사하기</button>
+      <button class="btn ghost" id="galBtn">9가지 유형 모두 보기</button>
+      <button class="btn primary" id="retryBtn">다시 테스트하기</button>
+    </div>
+    <section class="section" id="gallery" hidden>
+      <h3><span class="dot"></span>9가지 에니어그램 유형</h3>
+      <p class="sub">이제는 모든 유형을 공개해도 괜찮아요. 내 결과와 다른 유형도 천천히 읽어 보세요.</p>
+      <div class="gallery">${galleryHTML}</div>
+    </section>
+    <p class="disclaimer">이 결과는 자기 탐색을 위한 출발점이에요. 에니어그램은 ‘맞히는 것’보다 ‘알아 가는 것’이 더 중요합니다.</p>`;
+
+  lastText = `[Lovegram] 나의 에니어그램 유형: ${t}번 ${T.name} (${T.char})\n“${T.tagline}”\n일치도 ${fit}% · 신뢰도 ${R.conf.label} · 2순위 ${second.t}번 ${TYPES[second.t].name}\n\nMiracle Always Happens to Anyone`;
+  $("#copyBtn").onclick = () => copyText(lastText);
+  $("#retryBtn").onclick = () => { resetState(); show("intro"); };
+  $("#galBtn").onclick = () => { const g = $("#gallery"); g.hidden = !g.hidden; if (!g.hidden) g.scrollIntoView({ behavior: "smooth", block: "start" }); };
+}
+
+function animateBars() {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%");
+    document.querySelectorAll(".seg div").forEach(d => d.style.flexGrow = d.dataset.grow);
+  }));
+}
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 1800); }
+function copyText(text) {
+  const fallback = () => {
+    const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast("결과가 복사되었어요"); } catch (e) { toast("복사에 실패했어요"); }
+    ta.remove();
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(() => toast("결과가 복사되었어요"), fallback);
+  else fallback();
+}
+
+/* =========================================================
+   8. 초기화
+   ========================================================= */
+$("#logo").innerHTML = ennea(false);
+$("#heroEnnea").innerHTML = ennea(true);
+$("#loadEnnea").innerHTML = ennea(true);
+$("#chipCount").textContent = ORDER.length + "개의 장면";
+resetState();
+$("#startBtn").onclick = () => { resetState(); show("quiz"); renderQ(); };
+$("#backBtn").onclick = goBack;
+$("#homeBtn").onclick = () => {
+  if ($("#quiz").classList.contains("active") && Object.keys(S.answers).length && !confirm("진행 중인 테스트를 그만두고 처음으로 돌아갈까요?")) return;
+  resetState(); show("intro");
+};
+document.addEventListener("keydown", e => {
+  if (!$("#quiz").classList.contains("active")) return;
+  const map = { "1": 0, "2": 1, "3": 2, "4": 3, "a": 0, "b": 1, "c": 2, "d": 3 };
+  const k = e.key.toLowerCase();
+  if (k in map) { const btn = document.querySelectorAll(".opt")[map[k]]; if (btn) btn.click(); }
+  else if (e.key === "ArrowLeft" || e.key === "Backspace") { e.preventDefault(); goBack(); }
+});
+</script>
+</body>
+</html>
